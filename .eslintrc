@@ -1,0 +1,91 @@
+{
+    "env": {
+        "es6": true,
+        "jest": true,
+        "browser": true
+    },
+    "plugins": [
+        "prettier",
+        "@typescript-eslint",
+        "import",
+        "jsx-a11y",
+        "react",
+        "react-hooks"
+    ],
+    "extends": [
+        "airbnb",
+        "prettier",
+        "prettier/react",
+        "prettier/@typescript-eslint",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:eslint-plugin-import/typescript"
+    ],
+    "rules": {
+        "prettier/prettier": 2,
+        "max-len": [
+            2,
+            {
+                "code": 100,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreComments": true,
+                "ignoreTrailingComments": true,
+                "ignoreUrls": true,
+                "ignoreRegExpLiterals": true
+            }
+        ],
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "mjs": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "import/no-unresolved": [
+            2,
+            {
+                "ignore": [
+                    "\\.(png|jpg|svg)\\?webp$"
+                ]
+            }
+        ],
+        "import/no-cycle": 0,
+        "no-unused-expressions": 0,
+        "@typescript-eslint/no-unused-expressions": 2,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".tsx",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/jsx-props-no-spreading": 0,
+        "react/jsx-curly-brace-presence": 0,
+        "import/prefer-default-export": 0,
+        "no-useless-constructor": 0,
+        "@typescript-eslint/no-empty-interface": 0,
+        "no-return-await": 1,
+        "class-methods-use-this": 0,
+        "@typescript-eslint/camelcase": 0,
+        "@typescript-eslint/interface-name-prefix": 0,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/*.tsx"
+            ],
+            "rules": {
+                "react/prop-types": "off"
+            }
+        }
+    ]
+}
