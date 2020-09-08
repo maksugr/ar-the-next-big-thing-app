@@ -7,13 +7,10 @@ import { OBJLoader } from './OBJLoader';
 const LANDMARKS_LENGTH = 468;
 
 const marks = [];
-let points = [];
 
 let model;
 let mask;
-let triangle;
 let bg;
-let cube;
 let video;
 let renderer;
 let camera;
@@ -25,22 +22,24 @@ function onWindowResize() {
     camera.aspect = video.videoWidth / video.videoHeight;
     camera.updateProjectionMatrix();
 
-    if (window.innerWidth > window.innerHeight)
+    if (window.innerWidth > window.innerHeight) {
         renderer.setSize(
             window.innerWidth,
             (window.innerWidth * video.videoHeight) / video.videoWidth
         );
-    else
+    } else {
         renderer.setSize(
             (window.innerHeight * video.videoWidth) / video.videoHeight,
             window.innerHeight
         );
+    }
 }
 
 function animate() {
     bg.needsUpdate = true;
 
     requestAnimationFrame(animate);
+
     renderer.render(scene, camera);
 }
 
@@ -49,60 +48,10 @@ async function renderPrediction() {
 
     if (predictions.length > 0) {
         mask.visible = true;
-        cube.visible = true;
+
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < predictions.length; i++) {
             const keypoints = predictions[i].scaledMesh;
-
-            points = keypoints;
-
-            const v2 = new THREE.Vector3(
-                -keypoints[7][0],
-                -keypoints[7][1],
-                -keypoints[7][2]
-            );
-            const v1 = new THREE.Vector3(
-                -keypoints[175][0],
-                -keypoints[175][1],
-                -keypoints[175][2]
-            );
-            const v3 = new THREE.Vector3(
-                -keypoints[263][0],
-                -keypoints[263][1],
-                -keypoints[263][2]
-            );
-
-            const xi = v1.x + v2.x + v3.x;
-            const yi = v1.y + v2.y + v3.y;
-            const zi = v1.z + v2.z + v3.z;
-
-            triangle.geometry.vertices[0].copy(v1);
-            triangle.geometry.vertices[1].copy(v2);
-            triangle.geometry.vertices[2].copy(v3);
-            triangle.geometry.verticesNeedUpdate = true;
-            triangle.geometry.computeFaceNormals();
-
-            const normal = triangle.geometry.faces[0].normal.clone();
-
-            normal.transformDirection(triangle.matrixWorld);
-            normal.add(new THREE.Vector3(xi / 3, yi / 3, zi / 3));
-            cube.position.set(xi / 3, yi / 3, zi / 3);
-            cube.lookAt(normal);
-
-            const p1 = new THREE.Vector3(
-                -points[10][0],
-                -points[10][1],
-                -points[10][2]
-            );
-            const p2 = new THREE.Vector3(
-                -points[175][0],
-                -points[175][1],
-                -points[175][2]
-            );
-
-            const scale = p1.distanceTo(p2) / 163.4;
-
-            cube.scale.set(scale, scale, scale);
 
             // eslint-disable-next-line no-plusplus
             for (let j = 0; j < keypoints.length; j++) {
@@ -116,8 +65,8 @@ async function renderPrediction() {
         }
     } else {
         mask.visible = false;
-        cube.visible = false;
     }
+
     requestAnimationFrame(renderPrediction);
 }
 
@@ -164,23 +113,6 @@ export function intializeThreejs({ maskColor }) {
 
     const geometry = new THREE.BoxGeometry(2, 2, 2);
 
-    const triGeo = new THREE.Geometry();
-    triGeo.vertices.push(new THREE.Vector3(1, 0, 0));
-    triGeo.vertices.push(new THREE.Vector3(-1, 0, 0));
-    triGeo.vertices.push(new THREE.Vector3(0, 0, 1));
-
-    triGeo.faces.push(new THREE.Face3(0, 1, 2));
-
-    triangle = new THREE.Mesh(
-        triGeo,
-        new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })
-    );
-    triangle.visible = false;
-    scene.add(triangle);
-
-    cube = new THREE.Object3D();
-    scene.add(cube);
-
     new OBJLoader().load(`${process.env.PUBLIC_URL}/mask.obj`, (obj) => {
         obj.traverse((child) => {
             if (child instanceof THREE.Mesh) {
@@ -191,12 +123,12 @@ export function intializeThreejs({ maskColor }) {
                         color: maskColor
                     })
                 );
+
+                mask.visible = false;
+
                 scene.add(mask);
             }
         });
-    });
-    new OBJLoader().load(`${process.env.PUBLIC_URL}/crab.obj`, (obj) => {
-        scene.add(obj);
     });
 
     // eslint-disable-next-line no-plusplus
@@ -208,16 +140,17 @@ export function intializeThreejs({ maskColor }) {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    if (window.innerWidth > window.innerHeight)
+    if (window.innerWidth > window.innerHeight) {
         renderer.setSize(
             window.innerWidth,
             (window.innerWidth * video.videoHeight) / video.videoWidth
         );
-    else
+    } else {
         renderer.setSize(
             (window.innerHeight * video.videoWidth) / video.videoHeight,
             window.innerHeight
         );
+    }
 
     container.appendChild(renderer.domElement);
 
@@ -229,7 +162,7 @@ export function intializeThreejs({ maskColor }) {
 export async function intializeEngine({ callback }) {
     await tf.setBackend('webgl');
 
-    model = await facemesh.load({ maxFaces: 1 });
+    model = await facemesh.load({ maxFaces: 10 });
 
     renderPrediction();
 
