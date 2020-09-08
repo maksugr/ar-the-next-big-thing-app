@@ -162,7 +162,7 @@ export function intializeThreejs({ maskColor }) {
 export async function intializeEngine({ callback }) {
     await tf.setBackend('webgl');
 
-    model = await facemesh.load({ maxFaces: 10 });
+    model = await facemesh.load({ maxFaces: 1 });
 
     renderPrediction();
 
