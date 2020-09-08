@@ -1,29 +1,127 @@
-/* eslint-disable */
-
 import * as THREE from 'three';
 import * as facemesh from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs-core';
 
 import { OBJLoader } from './OBJLoader';
-import { callbackify } from 'util';
 
-var model;
-var marks = [];
-const landmarksLength = 468;
+const LANDMARKS_LENGTH = 468;
 
-var mask;
-var triangle;
-var bg;
-var points = [];
-var cube;
-var video;
+const marks = [];
+let points = [];
+
+let model;
+let mask;
+let triangle;
+let bg;
+let cube;
+let video;
 let renderer;
 let camera;
-var container;
+let container;
 let scene;
 let videoSprite;
 
-export function intializeThreejs({maskColor}) {
+function onWindowResize() {
+    camera.aspect = video.videoWidth / video.videoHeight;
+    camera.updateProjectionMatrix();
+
+    if (window.innerWidth > window.innerHeight)
+        renderer.setSize(
+            window.innerWidth,
+            (window.innerWidth * video.videoHeight) / video.videoWidth
+        );
+    else
+        renderer.setSize(
+            (window.innerHeight * video.videoWidth) / video.videoHeight,
+            window.innerHeight
+        );
+}
+
+function animate() {
+    bg.needsUpdate = true;
+
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+async function renderPrediction() {
+    const predictions = await model.estimateFaces(video);
+
+    if (predictions.length > 0) {
+        mask.visible = true;
+        cube.visible = true;
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < predictions.length; i++) {
+            const keypoints = predictions[i].scaledMesh;
+
+            points = keypoints;
+
+            const v2 = new THREE.Vector3(
+                -keypoints[7][0],
+                -keypoints[7][1],
+                -keypoints[7][2]
+            );
+            const v1 = new THREE.Vector3(
+                -keypoints[175][0],
+                -keypoints[175][1],
+                -keypoints[175][2]
+            );
+            const v3 = new THREE.Vector3(
+                -keypoints[263][0],
+                -keypoints[263][1],
+                -keypoints[263][2]
+            );
+
+            const xi = v1.x + v2.x + v3.x;
+            const yi = v1.y + v2.y + v3.y;
+            const zi = v1.z + v2.z + v3.z;
+
+            triangle.geometry.vertices[0].copy(v1);
+            triangle.geometry.vertices[1].copy(v2);
+            triangle.geometry.vertices[2].copy(v3);
+            triangle.geometry.verticesNeedUpdate = true;
+            triangle.geometry.computeFaceNormals();
+
+            const normal = triangle.geometry.faces[0].normal.clone();
+
+            normal.transformDirection(triangle.matrixWorld);
+            normal.add(new THREE.Vector3(xi / 3, yi / 3, zi / 3));
+            cube.position.set(xi / 3, yi / 3, zi / 3);
+            cube.lookAt(normal);
+
+            const p1 = new THREE.Vector3(
+                -points[10][0],
+                -points[10][1],
+                -points[10][2]
+            );
+            const p2 = new THREE.Vector3(
+                -points[175][0],
+                -points[175][1],
+                -points[175][2]
+            );
+
+            const scale = p1.distanceTo(p2) / 163.4;
+
+            cube.scale.set(scale, scale, scale);
+
+            // eslint-disable-next-line no-plusplus
+            for (let j = 0; j < keypoints.length; j++) {
+                const [xj, yj, zj] = keypoints[j];
+
+                if (mask) {
+                    mask.geometry.vertices[j].set(-xj, -yj, -zj / 30);
+                    mask.geometry.verticesNeedUpdate = true;
+                }
+            }
+        }
+    } else {
+        mask.visible = false;
+        cube.visible = false;
+    }
+    requestAnimationFrame(renderPrediction);
+}
+
+export function intializeThreejs({ maskColor }) {
     video = document.getElementById('video');
     container = document.getElementById('video-container');
 
@@ -64,7 +162,7 @@ export function intializeThreejs({maskColor}) {
     videoSprite.position.copy(camera.position);
     videoSprite.position.z = 0;
 
-    var geometry = new THREE.BoxGeometry(2, 2, 2);
+    const geometry = new THREE.BoxGeometry(2, 2, 2);
 
     const triGeo = new THREE.Geometry();
     triGeo.vertices.push(new THREE.Vector3(1, 0, 0));
@@ -98,7 +196,8 @@ export function intializeThreejs({maskColor}) {
         });
     });
 
-    for (let index = 0; index < landmarksLength; index++) {
+    // eslint-disable-next-line no-plusplus
+    for (let index = 0; index < LANDMARKS_LENGTH; index++) {
         const element = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         marks.push(element);
     }
@@ -124,30 +223,7 @@ export function intializeThreejs({maskColor}) {
     animate();
 }
 
-function onWindowResize() {
-    camera.aspect = video.videoWidth / video.videoHeight;
-    camera.updateProjectionMatrix();
-
-    if (window.innerWidth > window.innerHeight)
-        renderer.setSize(
-            window.innerWidth,
-            (window.innerWidth * video.videoHeight) / video.videoWidth
-        );
-    else
-        renderer.setSize(
-            (window.innerHeight * video.videoWidth) / video.videoHeight,
-            window.innerHeight
-        );
-}
-
-function animate() {
-    bg.needsUpdate = true;
-
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-
-export async function intializeEngine({callback}) {
+export async function intializeEngine({ callback }) {
     await tf.setBackend('webgl');
 
     model = await facemesh.load({ maxFaces: 1 });
@@ -157,81 +233,6 @@ export async function intializeEngine({callback}) {
     setTimeout(() => {
         callback();
     }, 1000);
-}
-
-async function renderPrediction() {
-    const predictions = await model.estimateFaces(video);
-
-    if (predictions.length > 0) {
-        mask.visible = true;
-        cube.visible = true;
-        for (let i = 0; i < predictions.length; i++) {
-            const keypoints = predictions[i].scaledMesh;
-
-            points = keypoints;
-
-            const v2 = new THREE.Vector3(
-                -keypoints[7][0],
-                -keypoints[7][1],
-                -keypoints[7][2]
-            );
-            const v1 = new THREE.Vector3(
-                -keypoints[175][0],
-                -keypoints[175][1],
-                -keypoints[175][2]
-            );
-            const v3 = new THREE.Vector3(
-                -keypoints[263][0],
-                -keypoints[263][1],
-                -keypoints[263][2]
-            );
-
-            const x = v1.x + v2.x + v3.x;
-            const y = v1.y + v2.y + v3.y;
-            const z = v1.z + v2.z + v3.z;
-
-            triangle.geometry.vertices[0].copy(v1);
-            triangle.geometry.vertices[1].copy(v2);
-            triangle.geometry.vertices[2].copy(v3);
-            triangle.geometry.verticesNeedUpdate = true;
-            triangle.geometry.computeFaceNormals();
-
-            const normal = triangle.geometry.faces[0].normal.clone();
-
-            normal.transformDirection(triangle.matrixWorld);
-            normal.add(new THREE.Vector3(x / 3, y / 3, z / 3));
-            cube.position.set(x / 3, y / 3, z / 3);
-            cube.lookAt(normal);
-
-            const p1 = new THREE.Vector3(
-                -points[10][0],
-                -points[10][1],
-                -points[10][2]
-            );
-            const p2 = new THREE.Vector3(
-                -points[175][0],
-                -points[175][1],
-                -points[175][2]
-            );
-
-            const scale = p1.distanceTo(p2) / 163.4;
-
-            cube.scale.set(scale, scale, scale);
-
-            for (let i = 0; i < keypoints.length; i++) {
-                const [x, y, z] = keypoints[i];
-
-                if (mask) {
-                    mask.geometry.vertices[i].set(-x, -y, -z / 30);
-                    mask.geometry.verticesNeedUpdate = true;
-                }
-            }
-        }
-    } else {
-        mask.visible = false;
-        cube.visible = false;
-    }
-    requestAnimationFrame(renderPrediction);
 }
 
 export function changeMaskColor(color) {
