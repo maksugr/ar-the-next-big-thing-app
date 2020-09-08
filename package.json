@@ -24,6 +24,9 @@
     }
   },
   "dependencies": {
+    "@tensorflow-models/facemesh": "0.0.1",
+    "@tensorflow/tfjs-converter": "^1.7.2",
+    "@tensorflow/tfjs-core": "^1.7.2",
     "@types/dotenv": "^8.2.0",
     "@types/jest": "25.2.1",
     "@types/lodash": "^4.14.150",
@@ -46,6 +49,7 @@
     "react-use": "^14.1.1",
     "redux": "^4.0.5",
     "styled-components": "^5.1.0",
+    "three": "^0.113.2",
     "typescript": "^3.8.3",
     "uuid": "^3.3.2"
   },
@@ -87,6 +91,5 @@
     "name": "Roman Ponomarev",
     "email": "maksugr@gmail.com"
   },
-  "homepage": "https://maksugr.com/presentations/ar-the-next-big-thing",
   "license": "MIT"
 }

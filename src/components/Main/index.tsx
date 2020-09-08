@@ -1,7 +1,11 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 
+import CameraPermission from '../CameraPermission';
+import Content from '../Content';
+
 const StyledMain = styled.div`
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,7 +15,16 @@ const StyledMain = styled.div`
 `;
 
 const Main: FunctionComponent = () => {
-    return <StyledMain />;
+    const [isCameraAllowed, setIsCameraAllowed] = useState(false);
+
+    return (
+        <StyledMain>
+            {!isCameraAllowed && (
+                <CameraPermission onClick={() => setIsCameraAllowed(true)} />
+            )}
+            {isCameraAllowed && <Content />}
+        </StyledMain>
+    );
 };
 
 export default Main;

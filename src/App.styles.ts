@@ -6,6 +6,7 @@ export const GlobalStylesApp = createGlobalStyle`
         margin: 0;
         font-family: 'Montserrat', sans-serif;
         font-family: 'Roboto Mono', monospace;
+        background: #0e1111;
     }
 
     #root {
