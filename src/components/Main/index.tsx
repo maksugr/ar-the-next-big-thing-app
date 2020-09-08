@@ -1,22 +1,31 @@
 import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
+import { useWindowSize } from 'react-use';
 
 import CameraPermission from '../CameraPermission';
 import Content from '../Content';
 
-const StyledMain = styled.div`
+interface ISlyledMain {
+    readonly height: number;
+}
+
+const StyledMain = styled.div<ISlyledMain>`
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100vh;
+    ${({ height }) => `
+        height: ${height}px;
+        max-height: ${height}px;
+    `}
     background: #0e1111;
 `;
 
 const Main: FunctionComponent = () => {
     const [isCameraAllowed, setIsCameraAllowed] = useState(false);
-    const [isFrontCamera, setIsFrontCamera] = useState(false);
+    const [isFrontCamera, setIsFrontCamera] = useState(true);
+    const { height } = useWindowSize();
 
     const toggleCamera = () => {
         if (isFrontCamera) {
@@ -27,7 +36,7 @@ const Main: FunctionComponent = () => {
     };
 
     return (
-        <StyledMain>
+        <StyledMain height={height}>
             {!isCameraAllowed && (
                 <CameraPermission onClick={() => setIsCameraAllowed(true)} />
             )}

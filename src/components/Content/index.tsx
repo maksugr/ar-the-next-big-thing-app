@@ -24,6 +24,10 @@ interface IStyledMenuContentItemLeft {
     readonly button?: boolean;
 }
 
+interface IStyledVideoContainer {
+    readonly visible: boolean;
+}
+
 const StyledContent = styled.div`
     position: relative;
     width: 100%;
@@ -46,7 +50,7 @@ const StyledLoading = styled.div`
     background: #0e1111;
 `;
 
-const StyledVideoContainer = styled.div`
+const StyledVideoContainer = styled.div<IStyledVideoContainer>`
     video {
         display: none;
     }
@@ -56,6 +60,12 @@ const StyledVideoContainer = styled.div`
         min-width: 100vw;
         object-fit: cover;
     }
+
+    ${({ visible }) =>
+        !visible &&
+        `
+        display: none;
+    `}
 `;
 
 const StyledMenu = styled.div`
@@ -107,7 +117,7 @@ const StyledMenuContentItemRight = styled.div`
 `;
 
 const StyledMenuToggle = styled.div`
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 10px;
     font-size: 100px;
@@ -229,8 +239,17 @@ const Content: FunctionComponent<IContent> = ({
                     </StyledMenuContent>
                 </StyledMenu>
             )}
-            <StyledVideoContainer id='video-container'>
-                <video ref={videoRef} id='video' />
+            <StyledVideoContainer
+                id='video-container'
+                visible={!isMenuOpened && !isLoading}
+            >
+                <video
+                    ref={videoRef}
+                    id='video'
+                    playsInline
+                    autoPlay={false}
+                    muted
+                />
             </StyledVideoContainer>
         </StyledContent>
     );
