@@ -124,18 +124,18 @@
   "buffers": [
     {
       "byteLength": 115464,
-      "uri": "scene.bin"
+      "uri": "/presentations/ar-the-next-big-thing/scene.bin"
     }
   ],
   "images": [
     {
-      "uri": "textures/lambert1_baseColor.png"
+      "uri": "/presentations/ar-the-next-big-thing/textures/lambert1_baseColor.png"
     },
     {
-      "uri": "textures/lambert1_metallicRoughness.png"
+      "uri": "/presentations/ar-the-next-big-thing/textures/lambert1_metallicRoughness.png"
     },
     {
-      "uri": "textures/lambert1_normal.png"
+      "uri": "/presentations/ar-the-next-big-thing/textures/lambert1_normal.png"
     }
   ],
   "materials": [
