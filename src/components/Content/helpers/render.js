@@ -5,12 +5,13 @@ import * as facemesh from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs-core';
 
 import { OBJLoader } from './OBJLoader';
+import { callbackify } from 'util';
 
 var model;
 var marks = [];
 const landmarksLength = 468;
 
-var faceObj;
+var mask;
 var triangle;
 var bg;
 var points = [];
@@ -22,7 +23,7 @@ var container;
 let scene;
 let videoSprite;
 
-export function intializeThreejs() {
+export function intializeThreejs({maskColor}) {
     video = document.getElementById('video');
     container = document.getElementById('video-container');
 
@@ -85,14 +86,14 @@ export function intializeThreejs() {
     new OBJLoader().load(`${process.env.PUBLIC_URL}/facemesh.obj`, (obj) => {
         obj.traverse((child) => {
             if (child instanceof THREE.Mesh) {
-                faceObj = new THREE.Mesh(
+                mask = new THREE.Mesh(
                     child.geometry,
                     new THREE.MeshLambertMaterial({
                         side: THREE.FrontSide,
-                        color: 'blue'
+                        color: maskColor
                     })
                 );
-                scene.add(faceObj);
+                scene.add(mask);
             }
         });
     });
@@ -146,19 +147,23 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-export async function intializeEngine() {
+export async function intializeEngine({callback}) {
     await tf.setBackend('webgl');
 
     model = await facemesh.load({ maxFaces: 1 });
 
     renderPrediction();
+
+    setTimeout(() => {
+        callback();
+    }, 1000);
 }
 
 async function renderPrediction() {
     const predictions = await model.estimateFaces(video);
 
     if (predictions.length > 0) {
-        faceObj.visible = true;
+        mask.visible = true;
         cube.visible = true;
         for (let i = 0; i < predictions.length; i++) {
             const keypoints = predictions[i].scaledMesh;
@@ -216,16 +221,22 @@ async function renderPrediction() {
             for (let i = 0; i < keypoints.length; i++) {
                 const [x, y, z] = keypoints[i];
 
-                if (faceObj) {
-                    console.log(faceObj);
-                    faceObj.geometry.vertices[i].set(-x, -y, -z / 30);
-                    faceObj.geometry.verticesNeedUpdate = true;
+                if (mask) {
+                    mask.geometry.vertices[i].set(-x, -y, -z / 30);
+                    mask.geometry.verticesNeedUpdate = true;
                 }
             }
         }
     } else {
-        faceObj.visible = false;
+        mask.visible = false;
         cube.visible = false;
     }
     requestAnimationFrame(renderPrediction);
+}
+
+export function changeMaskColor(color) {
+    if (mask) {
+        mask.material.color.set(color);
+        mask.material.needsUpdate = true;
+    }
 }

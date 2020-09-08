@@ -251,8 +251,6 @@ OBJLoader.prototype = {
             geometry.computeBoundingSphere();
         }
 
-        console.log(object);
-
         return object;
     }
 };
