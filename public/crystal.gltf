@@ -3,74 +3,56 @@
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 2093,
+      "count": 224,
       "max": [
-        0.79150629043579102,
-        4.9700412750244141,
-        1.4698363542556763
+        4.0662198066711426,
+        10.284032821655273,
+        2.3323593139648438
       ],
       "min": [
-        -1.5542954206466675,
-        0.10014626383781433,
-        -1.0858490467071533
+        -3.6839749813079834,
+        -0.21665847301483154,
+        -3.2250199317932129
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 25116,
+      "byteOffset": 2688,
       "componentType": 5126,
-      "count": 2093,
+      "count": 224,
       "max": [
-        1,
-        0.99445003271102905,
-        1
+        0.96104806661605835,
+        0.88570195436477661,
+        0.99249351024627686
       ],
       "min": [
-        -1,
-        -1,
-        -1
+        -0.99513357877731323,
+        -0.7512744665145874,
+        -0.97917550802230835
       ],
       "type": "VEC3"
     },
     {
-      "bufferView": 3,
-      "componentType": 5126,
-      "count": 2093,
-      "max": [
-        1,
-        0.9934195876121521,
-        1,
-        1
-      ],
-      "min": [
-        -0.99775654077529907,
-        -0.99830025434494019,
-        -1,
-        1
-      ],
-      "type": "VEC4"
-    },
-    {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 2093,
+      "count": 224,
       "max": [
-        1,
-        0.99985003471374512
+        0.98370355367660522,
+        0.98818016052246094
       ],
       "min": [
-        0,
-        0
+        0.01395377516746521,
+        0.0083878040313720703
       ],
       "type": "VEC2"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 3750,
+      "count": 336,
       "max": [
-        2092
+        223
       ],
       "min": [
         0
@@ -80,84 +62,60 @@
   ],
   "asset": {
     "extras": {
-      "author": "Finn_Swift (https://sketchfab.com/Finn_Swift)",
+      "author": "Alberto (https://sketchfab.com/onzoalberto)",
       "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/crystal-1c8338082b0a4c13bb59d27b21c30968",
-      "title": "Crystal"
+      "source": "https://sketchfab.com/3d-models/low-poly-crystal-5723d1ed7fdc46529e7eb7aac30e076f",
+      "title": "Low poly crystal"
     },
-    "generator": "Sketchfab-9.15.0",
+    "generator": "Sketchfab-9.26.0",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 15000,
+      "byteLength": 1344,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 16744,
-      "byteOffset": 15000,
+      "byteLength": 1792,
+      "byteOffset": 1344,
       "byteStride": 8,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 50232,
-      "byteOffset": 31744,
+      "byteLength": 5376,
+      "byteOffset": 3136,
       "byteStride": 12,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 33488,
-      "byteOffset": 81976,
-      "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
     }
   ],
   "buffers": [
     {
-      "byteLength": 115464,
-      "uri": "scene.bin"
+      "byteLength": 8512,
+      "uri": "crystal.bin"
     }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
   ],
   "images": [
     {
-      "uri": "textures/lambert1_baseColor.png"
-    },
-    {
-      "uri": "textures/lambert1_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/lambert1_normal.png"
+      "uri": "crystal-textures/Material_baseColor.png"
     }
   ],
   "materials": [
     {
-      "alphaMode": "BLEND",
       "doubleSided": true,
-      "emissiveFactor": [
-        0,
-        0,
-        0
-      ],
-      "name": "lambert1",
-      "normalTexture": {
-        "index": 2,
-        "scale": 1,
-        "texCoord": 0
+      "extensions": {
+        "KHR_materials_unlit": {}
       },
-      "occlusionTexture": {
-        "index": 1,
-        "strength": 1,
-        "texCoord": 0
-      },
+      "name": "Material",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
           1,
@@ -169,27 +127,21 @@
           "index": 0,
           "texCoord": 0
         },
-        "metallicFactor": 1,
-        "metallicRoughnessTexture": {
-          "index": 1,
-          "texCoord": 0
-        },
+        "metallicFactor": 0,
         "roughnessFactor": 1
       }
     }
   ],
   "meshes": [
     {
-      "name": "pCylinder3_lambert1_0",
       "primitives": [
         {
           "attributes": {
             "NORMAL": 1,
             "POSITION": 0,
-            "TANGENT": 2,
-            "TEXCOORD_0": 3
+            "TEXCOORD_0": 2
           },
-          "indices": 4,
+          "indices": 3,
           "material": 0,
           "mode": 4
         }
@@ -213,83 +165,65 @@
       "children": [
         2
       ],
-      "matrix": [
-        0.15384615957736969,
-        0,
-        0,
-        0,
-        0,
-        0.15384615957736969,
-        0,
-        0,
-        0,
-        0,
-        0.15384615957736969,
-        0,
-        0,
-        0,
-        0,
-        1
-      ],
       "name": "RootNode (model correction matrix)"
     },
     {
       "children": [
         3
       ],
+      "name": "root"
+    },
+    {
+      "children": [
+        4
+      ],
       "matrix": [
         1,
         0,
         0,
         0,
         0,
-        0,
+        2.2204460492503131e-16,
         1,
         0,
         0,
         -1,
-        0,
+        2.2204460492503131e-16,
         0,
         0,
         0,
         0,
         1
       ],
-      "name": "bbbd1044be6f4419849b3d6a33cce5e9.fbx"
-    },
-    {
-      "children": [
-        4
-      ],
-      "name": "RootNode"
+      "name": "GLTF_SceneRootNode"
     },
     {
       "children": [
         5
       ],
       "matrix": [
-        1,
+        0.52591216564178467,
         0,
         0,
         0,
         0,
-        1,
+        0.52591216564178467,
         0,
         0,
         0,
         0,
-        1,
+        0.52591216564178467,
         0,
-        0.25135347247123718,
-        -0.10628991574048996,
-        -0.43124842643737793,
+        0,
+        0,
+        0,
         1
       ],
-      "name": "pCylinder3"
+      "name": "Crystal_0"
     },
     {
       "mesh": 0,
-      "name": "pCylinder3_lambert1_0"
+      "name": ""
     }
   ],
   "samplers": [
@@ -313,14 +247,6 @@
     {
       "sampler": 0,
       "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
     }
   ]
 }
