@@ -139,7 +139,7 @@ const Content: FunctionComponent<IContent> = ({
     useEffect(() => {
         const video = videoRef?.current;
 
-        function canplayListener() {
+        function loadedmetadataListener() {
             video?.play();
 
             intializeThreejs({ maskColor });
@@ -150,7 +150,7 @@ const Content: FunctionComponent<IContent> = ({
             });
         }
 
-        video?.addEventListener('canplay', canplayListener);
+        video?.addEventListener('loadedmetadata', loadedmetadataListener);
 
         async function init() {
             const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -168,7 +168,10 @@ const Content: FunctionComponent<IContent> = ({
         init();
 
         return () => {
-            video?.removeEventListener('canplay', canplayListener);
+            video?.removeEventListener(
+                'loadedmetadata',
+                loadedmetadataListener
+            );
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
