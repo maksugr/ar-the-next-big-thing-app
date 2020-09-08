@@ -11,7 +11,7 @@ const StyledButton = styled.div`
     align-items: center;
     height: 70px;
     width: 100%;
-    background: red;
+    background: #ebd100;
     cursor: pointer;
     transition: opacity 0.3s;
 

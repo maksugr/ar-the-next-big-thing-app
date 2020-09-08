@@ -15,7 +15,14 @@ import {
     changeMaskColor
 } from './helpers/render';
 
-interface IContent {}
+interface IContent {
+    readonly isFrontCamera: boolean;
+    readonly toggleCamera: () => void;
+}
+
+interface IStyledMenuContentItemLeft {
+    readonly button?: boolean;
+}
 
 const StyledContent = styled.div`
     position: relative;
@@ -78,9 +85,21 @@ const StyledMenuContentItem = styled.div`
     }
 `;
 
-const StyledMenuContentItemLeft = styled.span`
+const StyledMenuContentItemLeft = styled.span<IStyledMenuContentItemLeft>`
     font-size: 16px;
     color: #fff;
+
+    ${({ button }) =>
+        button &&
+        `
+        color: #ebd100;
+        cursor: pointer;
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    `}
 `;
 
 const StyledMenuContentItemRight = styled.div`
@@ -89,23 +108,31 @@ const StyledMenuContentItemRight = styled.div`
 
 const StyledMenuToggle = styled.div`
     position: absolute;
-    top: 30px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     font-size: 100px;
     line-height: 0;
-    color: #fff;
+    color: #ebd100;
     cursor: pointer;
     transition: opacity 0.3s;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         opacity: 0.7;
     }
 `;
 
-const Content: FunctionComponent<IContent> = () => {
+const Content: FunctionComponent<IContent> = ({
+    isFrontCamera,
+    toggleCamera
+}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isMenuOpened, setIsMenuOpened] = useState(false);
-    const [maskColor, setMaskColor] = useState('#0000FF');
+    const [maskColor, setMaskColor] = useState('#ebd100');
 
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -129,7 +156,7 @@ const Content: FunctionComponent<IContent> = () => {
             const mediaStream = await navigator.mediaDevices.getUserMedia({
                 audio: false,
                 video: {
-                    facingMode: 'user'
+                    facingMode: isFrontCamera ? 'user' : 'environment'
                 }
             });
 
@@ -154,6 +181,17 @@ const Content: FunctionComponent<IContent> = () => {
     return (
         <StyledContent>
             {isLoading ? <StyledLoading>Loading...</StyledLoading> : null}
+            {!isLoading && (
+                <StyledMenuToggle
+                    onClick={() => {
+                        if (isMenuOpened) {
+                            setIsMenuOpened(false);
+                        } else setIsMenuOpened(true);
+                    }}
+                >
+                    {isMenuOpened ? '-' : '+'}
+                </StyledMenuToggle>
+            )}
             {isMenuOpened && (
                 <StyledMenu>
                     <StyledMenuContent>
@@ -173,18 +211,21 @@ const Content: FunctionComponent<IContent> = () => {
                                 />
                             </StyledMenuContentItemRight>
                         </StyledMenuContentItem>
+                        <StyledMenuContentItem>
+                            <StyledMenuContentItemLeft
+                                button
+                                onClick={() => {
+                                    toggleCamera();
+
+                                    setIsMenuOpened(false);
+                                }}
+                            >
+                                Set {isFrontCamera ? 'rear' : 'front'} camera
+                            </StyledMenuContentItemLeft>
+                        </StyledMenuContentItem>
                     </StyledMenuContent>
                 </StyledMenu>
             )}
-            <StyledMenuToggle
-                onClick={() => {
-                    if (isMenuOpened) {
-                        setIsMenuOpened(false);
-                    } else setIsMenuOpened(true);
-                }}
-            >
-                {isMenuOpened ? '-' : '+'}
-            </StyledMenuToggle>
             <StyledVideoContainer id='video-container'>
                 <video ref={videoRef} id='video' />
             </StyledVideoContainer>

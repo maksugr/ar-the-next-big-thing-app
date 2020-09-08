@@ -16,13 +16,33 @@ const StyledMain = styled.div`
 
 const Main: FunctionComponent = () => {
     const [isCameraAllowed, setIsCameraAllowed] = useState(false);
+    const [isFrontCamera, setIsFrontCamera] = useState(false);
+
+    const toggleCamera = () => {
+        if (isFrontCamera) {
+            setIsFrontCamera(false);
+        } else {
+            setIsFrontCamera(true);
+        }
+    };
 
     return (
         <StyledMain>
             {!isCameraAllowed && (
                 <CameraPermission onClick={() => setIsCameraAllowed(true)} />
             )}
-            {isCameraAllowed && <Content />}
+            {isCameraAllowed && isFrontCamera && (
+                <Content
+                    isFrontCamera={isFrontCamera}
+                    toggleCamera={toggleCamera}
+                />
+            )}
+            {isCameraAllowed && !isFrontCamera && (
+                <Content
+                    isFrontCamera={isFrontCamera}
+                    toggleCamera={toggleCamera}
+                />
+            )}
         </StyledMain>
     );
 };
