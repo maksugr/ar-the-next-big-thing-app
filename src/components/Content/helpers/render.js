@@ -181,7 +181,7 @@ export function intializeThreejs({ maskColor }) {
     cube = new THREE.Object3D();
     scene.add(cube);
 
-    new OBJLoader().load(`${process.env.PUBLIC_URL}/facemesh.obj`, (obj) => {
+    new OBJLoader().load(`${process.env.PUBLIC_URL}/mask.obj`, (obj) => {
         obj.traverse((child) => {
             if (child instanceof THREE.Mesh) {
                 mask = new THREE.Mesh(
@@ -194,6 +194,9 @@ export function intializeThreejs({ maskColor }) {
                 scene.add(mask);
             }
         });
+    });
+    new OBJLoader().load(`${process.env.PUBLIC_URL}/crab.obj`, (obj) => {
+        scene.add(obj);
     });
 
     // eslint-disable-next-line no-plusplus
