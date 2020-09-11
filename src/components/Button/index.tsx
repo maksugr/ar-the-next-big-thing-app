@@ -2,8 +2,9 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 interface IButton {
+    readonly href?: string;
     readonly className?: string;
-    readonly onClick: () => void;
+    readonly onClick?: () => void;
 }
 
 const StyledButton = styled.div`
@@ -15,6 +16,8 @@ const StyledButton = styled.div`
     background: #ebd100;
     cursor: pointer;
     transition: opacity 0.3s;
+    text-decoration: none;
+    color: #000;
 
     &:hover {
         opacity: 0.7;
@@ -23,11 +26,21 @@ const StyledButton = styled.div`
 
 const Button: FunctionComponent<IButton> = ({
     onClick,
+    href,
     className,
     children
 }) => {
-    return (
-        <StyledButton className={className} onClick={() => onClick()}>
+    return href ? (
+        <StyledButton
+            as='a'
+            href={href}
+            className={className}
+            onClick={() => onClick?.()}
+        >
+            {children}
+        </StyledButton>
+    ) : (
+        <StyledButton className={className} onClick={() => onClick?.()}>
             {children}
         </StyledButton>
     );

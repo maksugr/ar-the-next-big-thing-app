@@ -66,13 +66,7 @@ const Main: FunctionComponent = () => {
                     <StyledButton onClick={() => setIsCameraAllowed(true)}>
                         Mask
                     </StyledButton>
-                    <StyledButton
-                        onClick={() => {
-                            window.location.replace(
-                                `${window.location.hostname}/presentations/ar-the-next-big-thing/crystal`
-                            );
-                        }}
-                    >
+                    <StyledButton href='/presentations/ar-the-next-big-thing/crystal'>
                         Marker-base (hiro marker)
                     </StyledButton>
                 </StyledMenu>
