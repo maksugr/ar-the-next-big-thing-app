@@ -2,12 +2,24 @@ import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { useWindowSize } from 'react-use';
 
-import CameraPermission from '../CameraPermission';
 import Content from '../Content';
+import Button from '../Button';
 
 interface ISlyledMain {
     readonly height: number;
 }
+
+const StyledMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+`;
+
+const StyledText = styled.div`
+    font-size: 16px;
+    margin-bottom: 40px;
+    color: #fff;
+`;
 
 const StyledMain = styled.div<ISlyledMain>`
     position: relative;
@@ -20,6 +32,14 @@ const StyledMain = styled.div<ISlyledMain>`
         max-height: ${height}px;
     `}
     background: #0e1111;
+`;
+
+const StyledButton = styled(Button)`
+    margin-bottom: 40px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 `;
 
 const Main: FunctionComponent = () => {
@@ -38,7 +58,24 @@ const Main: FunctionComponent = () => {
     return (
         <StyledMain height={height}>
             {!isCameraAllowed && (
-                <CameraPermission onClick={() => setIsCameraAllowed(true)} />
+                <StyledMenu>
+                    <StyledText>
+                        To get AR experience you need to give access to the
+                        camera
+                    </StyledText>
+                    <StyledButton onClick={() => setIsCameraAllowed(true)}>
+                        Mask
+                    </StyledButton>
+                    <StyledButton
+                        onClick={() => {
+                            window.location.replace(
+                                `${window.location.hostname}/presentations/ar-the-next-big-thing/crystal`
+                            );
+                        }}
+                    >
+                        Marker-base (hiro marker)
+                    </StyledButton>
+                </StyledMenu>
             )}
             {isCameraAllowed && isFrontCamera && (
                 <Content

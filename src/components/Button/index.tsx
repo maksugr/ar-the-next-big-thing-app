@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 interface IButton {
+    readonly className?: string;
     readonly onClick: () => void;
 }
 
@@ -20,8 +21,16 @@ const StyledButton = styled.div`
     }
 `;
 
-const Button: FunctionComponent<IButton> = ({ onClick, children }) => {
-    return <StyledButton onClick={() => onClick()}>{children}</StyledButton>;
+const Button: FunctionComponent<IButton> = ({
+    onClick,
+    className,
+    children
+}) => {
+    return (
+        <StyledButton className={className} onClick={() => onClick()}>
+            {children}
+        </StyledButton>
+    );
 };
 
 export default Button;

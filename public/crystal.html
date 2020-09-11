@@ -10,6 +10,30 @@
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="/presentations/ar-the-next-big-thing/manifest.json" />
     <title>AR: the next big thing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400&family=Roboto+Mono:ital,wght@0,100;0,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            overflow: hidden;
+        }
+        scene {
+            position: relative;
+        }
+        .back-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-transform: uppercase;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #ebd100;
+            transition: opacity 0.3s;
+        }
+        .back-button:hover {
+            opacity: 0.7;
+        }
+    </style>
     <script>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -30,6 +54,7 @@
         vr-mode-ui="enabled: false"
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false;"
+        class="scene"
     >
         <a-marker preset="hiro">
             <a-entity
@@ -40,5 +65,6 @@
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
+    <a class="back-button" href="/presentations/ar-the-next-big-thing">back</a>
   </body>
 </html>

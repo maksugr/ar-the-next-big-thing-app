@@ -135,6 +135,22 @@ const StyledMenuToggle = styled.div`
         opacity: 0.7;
     }
 `;
+const StyledReturn = styled.a`
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    text-transform: uppercase;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #ebd100;
+    transition: opacity 0.3s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+`;
 
 const Content: FunctionComponent<IContent> = ({
     isFrontCamera,
@@ -251,6 +267,9 @@ const Content: FunctionComponent<IContent> = ({
                     muted
                 />
             </StyledVideoContainer>
+            <StyledReturn href='/presentations/ar-the-next-big-thing'>
+                Back
+            </StyledReturn>
         </StyledContent>
     );
 };
