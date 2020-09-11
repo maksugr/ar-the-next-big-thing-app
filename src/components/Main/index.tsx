@@ -42,6 +42,12 @@ const StyledButton = styled(Button)`
     }
 `;
 
+const StyledLink = styled.a`
+    font-weight: 700;
+    color: #ebd100;
+    text-decoration: none;
+`;
+
 const Main: FunctionComponent = () => {
     const [isCameraAllowed, setIsCameraAllowed] = useState(false);
     const [isFrontCamera, setIsFrontCamera] = useState(true);
@@ -69,6 +75,9 @@ const Main: FunctionComponent = () => {
                     <StyledButton href='/presentations/ar-the-next-big-thing/crystal'>
                         Marker-base (hiro marker)
                     </StyledButton>
+                    <StyledLink href='https://maksugr.com'>
+                        maksugr.com
+                    </StyledLink>
                 </StyledMenu>
             )}
             {isCameraAllowed && isFrontCamera && (
